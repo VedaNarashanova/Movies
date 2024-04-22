@@ -1,0 +1,64 @@
+<section class="jumbotron text-center">
+  <div class="container">
+    <h1 class="jumbotron-heading">MOVIES SHOP</h1>
+    <h4>ALL OF <th:block th:text="${#strings.toUpperCase(session.user.userFullName.name)}"></th:block>'s SHOPPING CARTS</h4>
+  </div>
+</section>
+<div class="container mb-4" style="margin-top: 20px;">
+  <div class="row">
+    <div class="col-12" th:if="${carts.size() > 0}">
+      <div class="container" style="margin-bottom: 50px">
+        <h5>Filter by time</h5>
+        <form class="form-inline" method="get" action="/shopping-cart/history">
+          <div class="input-group input-group-sm">
+            <div>
+              <label for="from" class="sr-only">From</label>
+              <input type="datetime-local" id="from" name="from" class="form-control" required=""
+                     autofocus="" style="max-height: 30px;">
+            </div>
+            <div>
+              <label for="to" class="sr-only">To</label>
+              <input type="datetime-local" id="to" name="to" class="form-control" required=""
+                     autofocus="" style="max-height: 30px;">
+            </div>
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-secondary btn-number">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div th:each="cart : ${carts}" style="margin-bottom: 50px">
+        <h5>Status: <th:bock th:text="${cart.getStatus()}"></th:bock> </h5>
+        <h5>Date of creation: <th:bock th:text="${#temporals.format(cart.getDateCreated(), 'dd-MM-yyyy HH:mm:ss', new java.util.Locale('en', 'EN'))}"></th:bock> </h5>
+        <div th:if="${cart.getTicketOrders().size() == 0}">
+          <hr/>
+          <p>Your cart is empty</p>
+          <hr/>
+        </div>
+        <div th:if="${cart.getTicketOrders().size() > 0}">
+          <div>
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead>
+                <tr>
+                  <th scope="col">Movie Title</th>
+                  <th scope="col">Number of tickets</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${cart.getTicketOrders()}" class="order">
+                  <td th:text="${order.getMovieTitle()}"></td>
+                  <td th:text="${order.getNumberOfTickets()}"></td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

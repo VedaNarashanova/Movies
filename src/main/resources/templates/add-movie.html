@@ -1,0 +1,58 @@
+<div xmlns:th="http://www.thymeleaf.org">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1 class="jumbotron-heading">MOVIE SHOP</h1>
+            <h4 th:text="(${movie != null ? 'EDIT MOVIE' : 'ADD MOVIE'})"></h4>
+        </div>
+    </section>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <form th:object="${movie}" th:action="${movie != null} ? @{/movies/edit/{id}(id=${movie.id})} : @{/movies/add}" method="post">
+                    <input id="id" type="hidden" name="id" th:value="(${movie} != null ? ${movie.getId()} : '')">
+                    <div class="form-group">
+                        <label for="movieTitle">Movie title</label>
+                        <input type="text"
+                               class="form-control"
+                               id="movieTitle"
+                               name="movieTitle"
+                               th:value="(${movie} != null ? ${movie.getTitle()} : '')"
+                               placeholder="Enter movie name"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label for="summary">Summary</label>
+                        <input type="text"
+                               class="form-control"
+                               id="summary"
+                               name="summary"
+                               th:value="(${movie} != null ? ${movie.getSummary()} : '')"
+                               placeholder="Enter summary"
+                               required>
+                    </div>
+                    <input type="hidden" name="rating" id="rating"
+                           th:value="${movie != null ? movie.getRating() : -1.0}">
+                    <div class="form-group">
+                        <label>Production</label>
+                        <select name="production" class="form-control">
+                            <option th:if="${movie} != null"
+                                    th:selected="${movie.getProduction() != null &&
+                                movie.getProduction().getId() == prod.getId()}"
+                                    th:each="prod : ${productions}"
+                                    th:value="${prod.getId()}"
+                                    th:text="${prod.getName()}">
+                            </option>
+                            <option th:if="${movie} == null"
+                                    th:each="prod : ${productions}"
+                                    th:value="${prod.getId()}"
+                                    th:text="${prod.getName()}">
+                            </option>
+                        </select>
+                    </div>
+                    <button id="submit" type="submit" class="btn btn-primary">Submit</button>
+                    <a type="button" class="btn btn-primary" href="/movies">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

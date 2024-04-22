@@ -1,0 +1,48 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">MOVIES SHOP</h1>
+      <h4>PRODUCTIONS</h4>
+    </div>
+  </section>
+  <div class="container mb-4">
+    <div class="row">
+      <div class="col-12" th:if="${productions.size() > 0}">
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Country</th>
+              <th scope="col">Address</th>
+              <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="prod : ${productions}" class="order">
+              <td th:text="${prod.getName()}"></td>
+              <td th:text="${prod.getCountry()}"></td>
+              <td th:text="${prod.getAddress()}"></td>
+              <td>
+                <a th:href="@{'/productions/edit-form/{id}' (id=${prod.getId()})}" class="btn btn-sm btn-secondary edit-product">
+                  <i class="fa fa-pencil-square-o"> Edit</i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="col mb-3">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <a href="/productions/add-form" class="btn btn-block btn-dark add-product-btn">
+            Add new production
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

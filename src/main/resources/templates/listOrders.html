@@ -1,0 +1,109 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">MOVIES SHOP</h1>
+      <h4>TICKET ORDERS</h4>
+    </div>
+  </section>
+  <div class="container mb-4" style="margin-top: 20px;">
+    <div class="row">
+      <div class="col-12" th:if="${orders.size() > 0}">
+        <div class="container" style="display: inline-block; width: 200px;">
+          <h5>Filter by movie</h5>
+          <form class="form-inline" method="get" action="/ticket">
+            <div class="input-group input-group-sm">
+              <select name="filterByMovie" class="form-control" aria-label="Small" required>
+                <option value="" disabled selected>Select movie...</option>
+                <option th:each="movie : ${movies}"
+                        th:text="${movie.getTitle()}"
+                        th:value="${movie.getTitle()}"></option>
+              </select>
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary btn-number">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="container" style="display: inline-block; width: 200px;">
+          <h5>Filter by user</h5>
+          <form class="form-inline" method="get" action="/ticket">
+            <div class="input-group input-group-sm">
+              <select name="filterByUser" class="form-control" aria-label="Small" required>
+                <option value="" disabled selected>Select user...</option>
+                <option th:each="user : ${users}"
+                        th:text="${user.getUserFullName().getName()}"
+                        th:value="${user.getUserFullName().getName()}"></option>
+              </select>
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary btn-number">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="container" style="display: inline-block; width: 600px;">
+          <h5>Filter by time</h5>
+          <form class="form-inline" method="get" action="/ticket">
+            <div class="input-group input-group-sm">
+              <div>
+                <label for="from" class="sr-only">From</label>
+                <input type="datetime-local" id="from" name="from" class="form-control" required=""
+                       autofocus="" style="max-height: 31px;">
+              </div>
+              <div>
+                <label for="to" class="sr-only">To</label>
+                <input type="datetime-local" id="to" name="to" class="form-control" required=""
+                       autofocus="" style="max-height: 31px;">
+              </div>
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary btn-number">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive" style="margin-top: 20px;">
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">Movie Title</th>
+              <th scope="col">Ordered By</th>
+              <th scope="col">Number of tickets</th>
+              <th scope="col">Date of Creation</th>
+              <th scope="col">Status</th>
+              <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="order : ${orders}" class="order">
+              <td th:text="${order.getMovieTitle()}"></td>
+              <!--              <td th:text="${session.user.userFullName.name}"></td>-->
+              <td th:text="${userIdOfTicket.get(order.getId())}"></td>
+              <td th:text="${order.getNumberOfTickets()}"></td>
+              <td th:text="${#temporals.format(datesOfOrders.get(order.getId()), 'dd-MM-yyyy HH:mm:ss', new java.util.Locale('en', 'EN'))}"></td>
+              <td th:text="${statusOfTicket.get(order.getId()) == 'CREATED' ? 'IN CART' : 'PURCHASED'}"></td>
+              <td class="text-right">
+                <form action="/shopping-cart/add-product" method="post">
+                  <input type="hidden" name="selectedMovie" th:value="${order.getMovieTitle()}">
+                  <input type="hidden" name="numTickets" th:value="${order.getNumberOfTickets()}">
+                  <button type="submit" class="btn btn-sm btn-primary duplicate-product fa">Duplicate</button>
+                </form>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-12" th:if="${orders.size() == 0}">
+        <h4>There are no ticket orders</h4>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>

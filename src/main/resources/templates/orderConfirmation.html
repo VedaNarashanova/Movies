@@ -1,0 +1,48 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">MOVIES SHOP</h1>
+      <h4>ORDER CONFIRMATION</h4>
+    </div>
+  </section>
+
+  <form action="/ticket/confirm" method="post">
+
+    <input type="hidden" name="name" th:value="${name}">
+    <input type="hidden" name="address" th:value="${address}">
+    <input type="hidden" name="selectedMovie" th:value="${selectedMovie}">
+    <input type="hidden" name="numTickets" th:value="${numTickets}">
+
+    <div class="container mb-4">
+      <div class="row">
+        <div class="col-12">
+          <div class="table-responsive">
+            <h2>Your Order Status</h2>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th scope="col">Client Name</th>
+                <th scope="col">Client IP Address</th>
+                <th scope="col">Ticket for Movie</th>
+                <th scope="col">Number of tickets</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td th:text="${name}"></td>
+                <td th:text="${address}"></td>
+                <td th:text="${selectedMovie}"></td>
+                <td th:text="${numTickets}"></td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <button id="submit" class="fa fa-shopping-cart btn btn-block btn-lg btn-primary" type="submit">
+        Confirm Order
+      </button>
+      <hr>
+    </div>
+  </form>
+</div>

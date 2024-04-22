@@ -1,0 +1,130 @@
+<div xmlns:th="http://www.thymeleaf.org">
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">MOVIES SHOP</h1>
+      <h4>ALL MOVIES</h4>
+    </div>
+  </section>
+
+  <div class="container offset-md-5" style="display: inline-block; width: 380px;">
+    <h5>Search movies</h5>
+    <form class="form-inline" method="get" action="/movies">
+      <div class="input-group input-group-sm">
+        <input type="text" class="form-control" aria-label="Small"
+               placeholder="Search by text..."
+               name="searchText">
+        <input type="number" step="0.1" min="0" max="10"
+               class="form-control" aria-label="Small"
+               placeholder="Above rating..."
+               name="searchRating">
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-secondary btn-number">
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="container" style="display: inline-block; width: 350px;">
+    <h5>Rate a movie</h5>
+    <form class="form-inline" method="get" action="/movies">
+      <div class="input-group input-group-sm">
+        <select name="rateMovieId" class="form-control" aria-label="Small" required>
+          <option value="" disabled selected>Select movie...</option>
+          <option th:each="movie : ${movies}"
+                  th:text="${movie.getTitle()}"
+                  th:value="${movie.getId()}"></option>
+        </select>
+        <input type="number" step="0.1" min="0" max="10"
+               class="form-control" aria-label="Small"
+               placeholder="Enter rating..."
+               name="rateMovieRating"
+               required>
+        <div class="input-group-append">
+          <button type="submit" class="btn btn-secondary btn-number">
+            <i class="fa fa-check"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <form action="/shopping-cart/add-product" method="post" style="margin-top: 20px;">
+    <div class="container mb-4">
+      <div class="row">
+        <div class="col-12" th:if="${movies.size() > 0}">
+          <div class="table-responsive">
+            <div>
+              <p th:if="${hasError}" th:text="${error}" class="text-danger"></p>
+            </div>
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th></th>
+                <th scope="col">Movie Title</th>
+                <th scope="col">Summary</th>
+                <th scope="col">Rating</th>
+                <th scope="col">Orders</th>
+                <th scope="col">Production</th>
+                <th></th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="movie : ${movies}" class="movie">
+                <td>
+                  <input name="selectedMovie" th:id="${movie.getTitle()}" th:value="${movie.getTitle()}" type="radio" required class="movieRadio" />
+                </td>
+                <td th:text="${movie.getTitle()}"></td>
+                <td th:text="${movie.getSummary()}"></td>
+                <td th:text="${movie.getRating() == -1 ? '-.-' : #numbers.formatDecimal(movie.getRating(),1,1)}"></td>
+                <!--                <td th:text="${movie.getRating() == -1} ? '-.-' : ${movie.getRating()}"></td>-->
+                <td th:text="${ticketsPerMovie.get(movie.getTitle()) ?: 0}"></td>
+                <td th:text="${movie.getProduction() != null}
+                            ? ${movie.getProduction().getName()} : 'No Production'"></td>
+                <td>
+                  <a th:href="@{'/movies/edit-form/{id}' (id=${movie.getId()})}" class="btn btn-sm btn-secondary edit-product">
+                    <i class="fa fa-pencil-square-o"> Edit</i>
+                  </a>
+                </td>
+                <td class="text-right">
+                  <a th:href="@{'/movies/delete/{id}' (id=${movie.getId()})}" class="btn btn-sm btn-danger delete-product">
+                    <i class="fa fa-trash"> Delete</i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="col mb-3">
+          <div class="row">
+            <div class="col-sm-12 col-md-12">
+              <a href="/movies/add-form" class="btn btn-block btn-dark add-product-btn">
+                Add new movie
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br><hr>
+      <div>
+        <h3>Order Movie Tickets</h3>
+      </div>
+
+      <!--      <div class="smallForm">-->
+      <!--        <p>Enter your name:</p>-->
+      <!--        <input class="form-control" type="text" name="name" required><br/>-->
+      <!--      </div>-->
+      <div class="smallForm">
+        <p>Choose number of tickets:</p>
+        <input class="form-control" type="number" name="numTickets" min="1" max="10" required><br/>
+      </div>
+      <button id="submit" class="btn btn-block btn-success fa fa-shopping-cart" type="submit"> Add To Cart</button>
+      <hr>
+    </div>
+  </form>
+
+</div>
